@@ -1,0 +1,6 @@
+---
+
+- name: GitlabRestartHandler
+  service:
+    name: gitlab
+    state: restarted

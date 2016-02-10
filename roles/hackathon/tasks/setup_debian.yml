@@ -1,0 +1,32 @@
+---
+
+# Definitions
+- name: Define hackathon_apt_packages.
+  set_fact:
+    hackathon_apt_packages: "{{ __hackathon_apt_packages | list }}"
+  when: hackathon_apt_packages is not defined
+
+- name: Define hackathon_git_repo.
+  set_fact:
+    hackathon_git_repo: "{{ __hackathon_git_repo }}"
+  when: hackathon_git_repo is not defined
+
+- name: Define hackathon_git_dest.
+  set_fact:
+    hackathon_git_dest: "{{ __hackathon_git_dest }}"
+  when: hackathon_git_dest is not defined
+
+- name: Install Hackathon Apt Packages
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+    cache_valid_time: 3600
+  with_items: hackathon_apt_packages
+
+- name: Install Git Repo
+  git:
+    repo: "{{ hackathon_git_repo }}"
+    depth: 1
+    dest: "{{ hackathon_git_dest }}"
+    update: no
+  

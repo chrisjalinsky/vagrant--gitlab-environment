@@ -1,0 +1,9 @@
+---
+
+# defaults
+__nodejs_key: "68576280"
+__nodejs_keyserver: "keyserver.ubuntu.com"
+__nodejs_apt_repo: "deb https://deb.nodesource.com/node_5.x trusty main"
+__nodejs_apt_packages:
+  - "build-essential"
+  - "nodejs"

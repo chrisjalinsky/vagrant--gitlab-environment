@@ -1,0 +1,45 @@
+---
+
+# Definitions
+- name: Define mongodb_key.
+  set_fact:
+    mongodb_key: "{{ __mongodb_key }}"
+  when: mongodb_key is not defined
+
+- name: Define mongodb_keyserver.
+  set_fact:
+    mongodb_keyserver: "{{ __mongodb_keyserver }}"
+  when: mongodb_keyserver is not defined
+
+- name: Define mongodb_apt_repo.
+  set_fact:
+    mongodb_apt_repo: "{{ __mongodb_apt_repo }}"
+  when: mongodb_apt_repo is not defined
+
+- name: Define mongodb_apt_packages.
+  set_fact:
+    mongodb_apt_packages: "{{ __mongodb_apt_packages | list }}"
+  when: mongodb_apt_packages is not defined
+
+# Tasks
+- name: Add apt key for Node.js
+  apt_key:
+    id: "{{ mongodb_key }}"
+    keyserver: "{{ mongodb_keyserver }}"
+    #validate_certs: no
+
+- name: Add repository
+  apt_repository:
+    repo: "{{ mongodb_apt_repo }}"
+
+- name: Add mongoDB apt packages
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+    cache_valid_time: 3600
+  with_items: mongodb_apt_packages
+
+- name: Ensure mongod restarted
+  service:
+    name: mongod
+    state: restarted

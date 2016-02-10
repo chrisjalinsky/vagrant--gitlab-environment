@@ -1,0 +1,14 @@
+---
+
+# defaults
+__gitlab_apt_packages:
+  - "curl"
+  - "openssh-server"
+  - "ca-certificates"
+  - "postfix"
+  
+# Must be defined last
+__gitlab_templates:
+  - src: "gitlab_bash_install.j2"
+    dest: "/usr/local/bin/git_bash_install"
+    mode: "0755"

@@ -1,0 +1,50 @@
+---
+
+# Definitions
+- name: Define gitlab_apt_packages.
+  set_fact:
+    gitlab_apt_packages: "{{ __gitlab_apt_packages | list }}"
+  when: gitlab_apt_packages is not defined
+
+- name: Define gitlab_templates.
+  set_fact:
+    gitlab_templates: "{{ __gitlab_templates | list }}"
+  when: gitlab_templates is not defined
+
+# Tasks
+- name: Add gitlab apt packages
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+    cache_valid_time: 3600
+  with_items: gitlab_apt_packages
+
+- name: Add gitlab templates
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode }}"
+    backup: yes
+  with_items: gitlab_templates
+
+- name: Run install script
+  command: "/bin/bash git_bash_install"
+
+- name: Install Gitlab
+  apt:
+    name: "gitlab-ce=8.4.3-ce.0"
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Run gitlab-ctl reconfigure
+  command: "gitlab-ctl reconfigure"
+
+#- name: Download deb
+#  get_url:
+#    url: "https://packages.gitlab.com/gitlab/gitlab-ce/packages/ubuntu/trusty/gitlab-ce_8.4.3-ce.0_amd64.deb"
+#    dest: "/tmp/gitlab-ce_8.4.3-ce.0_amd64.deb"
+#
+#- name: Install deb
+#  shell: "dpkg -i /tmp/gitlab-ce_8.4.3-ce.0_amd64.deb"
+    
+  

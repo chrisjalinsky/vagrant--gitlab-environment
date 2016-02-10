@@ -1,0 +1,6 @@
+__hackathon_apt_packages:
+  - "git"
+  - "build-essential"
+
+__hackathon_git_repo: "https://github.com/sahat/hackathon-starter.git"
+__hackathon_git_dest: "/tmp/hackathon"

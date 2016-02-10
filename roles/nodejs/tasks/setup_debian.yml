@@ -1,0 +1,40 @@
+---
+
+# Definitions
+- name: Define nodejs_key.
+  set_fact:
+    nodejs_key: "{{ __nodejs_key }}"
+  when: nodejs_key is not defined
+
+- name: Define nodejs_keyserver.
+  set_fact:
+    nodejs_keyserver: "{{ __nodejs_keyserver }}"
+  when: nodejs_keyserver is not defined
+
+- name: Define nodejs_apt_repo.
+  set_fact:
+    nodejs_apt_repo: "{{ __nodejs_apt_repo }}"
+  when: nodejs_apt_repo is not defined
+
+- name: Define nodejs_apt_packages.
+  set_fact:
+    nodejs_apt_packages: "{{ __nodejs_apt_packages | list }}"
+  when: nodejs_apt_packages is not defined
+
+# Tasks
+- name: Add apt key for Node.js
+  apt_key:
+    id: "{{ nodejs_key }}"
+    keyserver: "{{ nodejs_keyserver }}"
+    #validate_certs: no
+
+- name: Add repository
+  apt_repository:
+    repo: "{{ nodejs_apt_repo }}"
+
+- name: Add Node.js package along with building npm source packages
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+    cache_valid_time: 3600
+  with_items: nodejs_apt_packages
