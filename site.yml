@@ -14,3 +14,12 @@
     - role: nodejs
     - role: mongodb
     - role: gitlab
+
+- hosts: hack_servers
+  become: yes
+  gather_facts: no
+  become_user: root
+  tasks:
+    - name: Test vault thru semaphore UI
+      debug: var=vault_protected_var
+      ignore_errors: yes
